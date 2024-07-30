@@ -19,7 +19,7 @@ const initValues = {
     review: "loreum",
     rating: 2,
 }
-export default function ReviewForm({review}: {review: Review}) {
+export default function ReviewForm({review, closeModal}: {review: Review, closeModal: ()=>void}) {
     const [rating, setRating] = useState(initValues.rating)
 
     return(
@@ -29,6 +29,7 @@ export default function ReviewForm({review}: {review: Review}) {
                     onSubmit={(values)=>{
                         values.rating = rating
                         console.log('Review = ',values)
+                        closeModal()
                     }}>
                 {({errors, touched}) => (
                     <Form>

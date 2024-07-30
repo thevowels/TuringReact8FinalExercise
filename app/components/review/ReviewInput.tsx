@@ -17,7 +17,7 @@ export default function ReviewInput(){
                     <Modal.Title>Add Review</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ReviewForm/>
+                    <ReviewForm closeModal={handleClose}/>
                 </Modal.Body>
             </Modal>
 
