@@ -31,7 +31,7 @@ export default function MovieDetailUI({movie}: {movie: Movie}) {
                     Editing Movie
                 </Modal.Header>
                 <Modal.Body>
-                    <MovieForm/>
+                    <MovieForm movieToEdit={movie} closeModal={handleClose}/>
                 </Modal.Body>
             </Modal>
         </div>

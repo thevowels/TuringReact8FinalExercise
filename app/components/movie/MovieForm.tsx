@@ -2,6 +2,7 @@ import {Field, Form, Formik} from "formik";
 import {Button, Form as BForm} from "react-bootstrap";
 import styles from "@/app/movies/movie.module.css";
 import * as Yup from "yup";
+import {Movie} from "@/lib/features/movies/movieApi";
 
 const MovieSchema = Yup.object().shape({
     title: Yup.string().required()
@@ -18,19 +19,36 @@ const MovieSchema = Yup.object().shape({
         .required('Required'),
 })
 
-export default function MovieForm() {
+export default function MovieForm({movieToEdit, closeModal}:{movieToEdit:Movie, closeModal: ()=>void}) {
     const initValues = {
         title:"",
-        year:"",
+        year:0,
         name:"",
         phoneNo:"",
     }
+    if(movieToEdit){
+        initValues.title=movieToEdit.title
+        initValues.year = movieToEdit.year
+        initValues.name = movieToEdit.director.name
+        initValues.phoneNo= movieToEdit.director.phoneNo
+
+    }
+
+    const submitHandler=(values)=>{
+        if(movieToEdit){
+            console.log('Update Movie', values);
+        }else{
+            console.log('Save Movie', values);
+        }
+
+    }
 
     return <Formik
-        initialValues={initValues}
+        initialValues={initValues }
         validationSchema={MovieSchema}
         onSubmit={values => {
-            console.log(values);
+            submitHandler(values);
+            closeModal();
         }}>
         {({errors, touched}) => (
             <Form>
@@ -79,7 +97,7 @@ export default function MovieForm() {
                     {errors.phoneNo && touched.phoneNo ? (<div className={styles.error}>{errors.phoneNo}</div>) : null}
                 </BForm.Group>
                 <BForm.Group>
-                    <Button type={"submit"} className={"btn btn-primary"}>Save</Button>
+                    <Button type={"submit"} className={"btn btn-primary"}>{movieToEdit ? "Update":"Save"}</Button>
                 </BForm.Group>
             </Form>
         )}
