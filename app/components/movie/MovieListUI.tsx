@@ -1,6 +1,6 @@
 "use client"
 
-import {Movie} from "@/lib/features/movies/movieApi";
+import {Movie} from "@/lib/features/movie/movieApi";
 import MovieUI from "@/app/components/movie/MovieUI";
 import {useGetAllMoviesQuery} from "@/lib/features/movie/movieApi";
 

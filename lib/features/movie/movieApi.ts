@@ -10,7 +10,6 @@ export interface Movie{
     "_id": string,
     "title": string,
     "director": Director,
-    "description": string,
     "year":number,
     "_v": number
 }
@@ -29,7 +28,7 @@ export const moviesApiSlice = createApi({
         // for the argument type instead.
         getAllMovies: build.query<Movie[],undefined>({
             query: () => `/movies`,
-            // providesTags: ["Movies"]
+            providesTags: ["Movies"]
             // providesTags: (result, error, arg) =>
             //     result
             //         ? [...result.map(({ _id }) => ({ type: 'Todos' as const, id:_id })), 'Todos']
@@ -39,36 +38,45 @@ export const moviesApiSlice = createApi({
             // cached data returned by the query.
             // providesTags: (result, error, id) => [{ type: "Quotes", id }],
         }),
-        // addTodo: build.mutation<Todo, Partial<Todo> >({
-        //     query: (todo: Partial<Todo>) =>({
-        //         url: '/todos',
-        //         method: 'Post',
-        //         body: todo,
-        //     }),
-        //     // invalidatesTags:["Todos"]
-        //
-        //     async onQueryStarted(todo: Todo,{dispatch,queryFulfilled} ){
-        //         console.log('onQueryStarted ', todo);
-        //
-        //         try{
-        //             const {data:savedTodo} = await queryFulfilled
-        //             console.log('Saved saveTodo', savedTodo)
-        //             const patchResult = dispatch(
-        //                 todosApiSlice.util.updateQueryData('getAllTodos',undefined, (draft)=>{
-        //                     draft.push(savedTodo)
-        //                     return draft
-        //                 })
-        //             )
-        //         }catch(error){
-        //             console.log('error ', error)
-        //
-        //         }
-        //     }
-        //
-        // }),
+        addMovie: build.mutation<Movie, Partial<Movie> >({
+            query: (movie: Partial<Movie>) =>({
+                url: '/movies',
+                method: 'POST',
+                body: movie,
+            }),
+            // invalidatesTags:["Todos"]
+
+            async onQueryStarted(movie: Movie,{dispatch,queryFulfilled} ){
+                console.log('onQueryStarted ', movie);
+
+                try{
+                    const {data:savedMovie} = await queryFulfilled
+                    console.log('Saved saveTodo', savedMovie)
+                    const patchResult = dispatch(
+                        moviesApiSlice.util.updateQueryData('getAllMovies',undefined, (draft)=>{
+                            draft.push(savedMovie)
+                            return draft
+                        })
+                    )
+                }catch(error){
+                    console.log('error ', error)
+
+                }
+            }
+
+        }),
+        updateMovie: build.mutation<Movie,Movie>({
+            query: (movie: Movie) =>({
+                url: `/movies/${movie._id}`,
+                method: 'PUT',
+                body: movie,
+            }),
+            invalidatesTags: (result,error,arg) =>[{'type':'Todos',id:arg._id}]
+
+        })
 
 
     }),
 });
 
-export const { useGetAllMoviesQuery } = moviesApiSlice;
+export const { useGetAllMoviesQuery, useAddMovieMutation } = moviesApiSlice;

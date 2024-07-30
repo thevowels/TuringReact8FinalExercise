@@ -12,7 +12,6 @@ const movie:Movie =     {
         "phoneNo":"091234",
         "_id":"director1"
     },
-    "description":"The plot follows the vigilante Batman, police lieutenant James Gordon, and district attorney Harvey Dent, who form an alliance to dismantle organized crime in Gotham City. Their efforts are derailed by the Joker, an anarchistic mastermind who seeks to test how far Batman will go to save the city from chaos.",
     "year": 2005,
     "_v" : 0
 }

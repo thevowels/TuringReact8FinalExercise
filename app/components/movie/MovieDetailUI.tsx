@@ -1,5 +1,5 @@
 'use client'
-import {Movie} from "@/lib/features/movies/movieApi";
+import {Movie} from "@/lib/features/movie/movieApi";
 import styles from "@/app/movies/movie.module.css"
 import {useState} from "react";
 import {Modal} from "react-bootstrap";

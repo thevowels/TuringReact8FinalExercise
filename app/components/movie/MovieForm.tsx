@@ -2,7 +2,8 @@ import {Field, Form, Formik} from "formik";
 import {Button, Form as BForm} from "react-bootstrap";
 import styles from "@/app/movies/movie.module.css";
 import * as Yup from "yup";
-import {Movie} from "@/lib/features/movie/movieApi";
+import {Director, Movie} from "@/lib/features/movie/movieApi";
+import {useAddMovieMutation} from "@/lib/features/movie/movieApi";
 
 const MovieSchema = Yup.object().shape({
     title: Yup.string().required()
@@ -13,13 +14,45 @@ const MovieSchema = Yup.object().shape({
         .required('Required'),
     name:Yup.string()
         .min(2,'Too Short')
-        .max(20, 'Too Long')
+        .max(50, 'Too Long')
         .required('Required'),
     phoneNo:Yup.string()
         .required('Required'),
 })
 
-export default function MovieForm({movieToEdit, closeModal}:{movieToEdit:Movie, closeModal: ()=>void}) {
+function createUpdateMovieJSON(movieToEdit: Movie, values) {
+    const movieToUpdate = {
+        ...movieToEdit,
+        title: values.title,
+        year: values.year,
+        director: {
+            ...movieToEdit.director,
+            name: values.name,
+            phoneNo: values.phoneNo,
+        }
+    }
+    return movieToUpdate;
+}
+
+function createNewMovieJSON(values) {
+    const director: Partial<Director> = {
+        name: values.name,
+        phoneNo: values.phoneNo,
+    }
+    const newMovie: Partial<Movie> = {
+        title: values.title,
+        year: values.year,
+        director: director,
+    }
+    return newMovie;
+}
+
+export default function MovieForm({movieToEdit, closeModal}:{
+                                            movieToEdit:Movie,
+                                            closeModal: ()=>void}) {
+
+    const [addMovieApi, addMovieApiResult] = useAddMovieMutation();
+
     const initValues = {
         title:"",
         year:0,
@@ -35,10 +68,21 @@ export default function MovieForm({movieToEdit, closeModal}:{movieToEdit:Movie, 
     }
 
     const submitHandler=(values)=>{
+
         if(movieToEdit){
-            console.log('Update Movie', values);
+            const movieToUpdate = createUpdateMovieJSON(movieToEdit, values);
+            console.log('updating ', movieToUpdate)
+
+
         }else{
-            console.log('Save Movie', values);
+            const newMovie = createNewMovieJSON(values);
+            console.log('save movie : ', newMovie);
+            addMovieApi(newMovie)
+                .unwrap()
+                .then(data => {
+                    console.log("add Movie Success ", data)
+                    closeModal()
+                })
         }
 
     }
