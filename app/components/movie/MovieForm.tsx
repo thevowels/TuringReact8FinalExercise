@@ -2,7 +2,7 @@ import {Field, Form, Formik} from "formik";
 import {Button, Form as BForm} from "react-bootstrap";
 import styles from "@/app/movies/movie.module.css";
 import * as Yup from "yup";
-import {Movie} from "@/lib/features/movies/movieApi";
+import {Movie} from "@/lib/features/movie/movieApi";
 
 const MovieSchema = Yup.object().shape({
     title: Yup.string().required()

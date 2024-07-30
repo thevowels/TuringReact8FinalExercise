@@ -2,10 +2,12 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { StoreProvider } from "./StoreProvider";
 import { Nav } from "./components/Nav";
-
 import 'bootstrap/dist/css/bootstrap.css'
 import "./styles/globals.css";
 import styles from "./styles/layout.module.css";
+
+import '@smastrom/react-rating/style.css'
+
 
 interface Props {
   readonly children: ReactNode;
