@@ -19,7 +19,7 @@ export default function NewMovieInput(){
             <button type={"button"} className={"btn btn-primary"} onClick={handleShow}>Add New Movie</button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>New Movie</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <MovieForm/>
