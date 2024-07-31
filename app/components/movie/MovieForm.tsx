@@ -2,7 +2,7 @@ import {Field, Form, Formik} from "formik";
 import {Button, Form as BForm} from "react-bootstrap";
 import styles from "@/app/movies/movie.module.css";
 import * as Yup from "yup";
-import {Director, Movie} from "@/lib/features/movie/movieApi";
+import {Director, Movie, useUpdateMovieMutation} from "@/lib/features/movie/movieApi";
 import {useAddMovieMutation} from "@/lib/features/movie/movieApi";
 
 const MovieSchema = Yup.object().shape({
@@ -52,6 +52,8 @@ export default function MovieForm({movieToEdit, closeModal}:{
                                             closeModal: ()=>void}) {
 
     const [addMovieApi, addMovieApiResult] = useAddMovieMutation();
+    const [updateMovieApi, updateMovieApiResult] = useUpdateMovieMutation();
+
 
     const initValues = {
         title:"",
@@ -72,6 +74,12 @@ export default function MovieForm({movieToEdit, closeModal}:{
         if(movieToEdit){
             const movieToUpdate = createUpdateMovieJSON(movieToEdit, values);
             console.log('updating ', movieToUpdate)
+            updateMovieApi(movieToUpdate)
+                .unwrap()
+                .then(data =>{
+                    console.log("update Movie Success", data)
+                    closeModal();
+                })
 
 
         }else{

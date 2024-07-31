@@ -21,18 +21,18 @@ export const moviesApiSlice = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: BACKEND_URL }),
     reducerPath: "moviesApi",
     // Tag types are used for caching and invalidation.
-    tagTypes: ["Movie"],
+    tagTypes: ["Movies"],
     endpoints: (build) => ({
         // Supply generics for the return type (in this case `QuotesApiResponse`)
         // and the expected query argument. If there is no argument, use `void`
         // for the argument type instead.
         getAllMovies: build.query<Movie[],undefined>({
             query: () => `/movies`,
-            providesTags: ["Movies"]
-            // providesTags: (result, error, arg) =>
-            //     result
-            //         ? [...result.map(({ _id }) => ({ type: 'Todos' as const, id:_id })), 'Todos']
-            //         : ['Todos'],
+            // providesTags: ["Movies"],
+            providesTags: (result, error, arg) =>
+                result
+                    ? [...result.map(({ _id }) => ({ type: 'Movies' as const, id:_id })), 'Movies']
+                    : ['Movies'],
 
             // `providesTags` determines which 'tag' is attached to the
             // cached data returned by the query.
@@ -71,7 +71,24 @@ export const moviesApiSlice = createApi({
                 method: 'PUT',
                 body: movie,
             }),
-            invalidatesTags: (result,error,arg) =>[{'type':'Todos',id:arg._id}]
+            async onQueryStarted(movie:Movie, {dispatch,queryFulfilled}){
+                console.log('onQueryStarted update Movie', movie);
+                const patchResult = dispatch(
+                    moviesApiSlice.util.updateQueryData('getAllMovies', undefined, (draft)=>{
+                        console.log('draft ', draft)
+                        draft = draft.map(mv => mv._id != movie._id ? movie: mv)
+                        return draft;
+                    })
+                )
+                try{
+                    const{data:updatedMovie} = await queryFulfilled
+                    console.log('updated Movie', updatedMovie)
+                }catch(error){
+                    console.log('error ', error);
+                    patchResult.undo()
+                }
+            },
+            invalidatesTags: (result,error,arg) =>[{'type':'Movies',id:arg._id}]
 
         })
 
@@ -79,4 +96,4 @@ export const moviesApiSlice = createApi({
     }),
 });
 
-export const { useGetAllMoviesQuery, useAddMovieMutation } = moviesApiSlice;
+export const { useGetAllMoviesQuery, useAddMovieMutation, useUpdateMovieMutation } = moviesApiSlice;
