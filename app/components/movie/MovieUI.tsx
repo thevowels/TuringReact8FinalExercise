@@ -7,9 +7,15 @@ import "@/app/movies/movie.module.css"
 import {useRouter} from "next/navigation";
 import ConfirmModel from "@/app/components/common/ConfirmModel";
 import {useState} from "react";
+import {useDeleteMovieMutation} from "@/lib/features/movie/movieApi";
+
+
 export default function MovieUI({movie}:{movie:Movie}) {
     const router= useRouter();
     const [showConfirm, setShowConfirm] = useState(false);
+
+    const [deleteMovieApi, deleteMovieApiResult ] = useDeleteMovieMutation();
+
     const btnDetailHandler = ()=>{
         router.push(`/movies/${movie._id}`);
     }
@@ -21,6 +27,11 @@ export default function MovieUI({movie}:{movie:Movie}) {
     }
     const handleYes = ()=>{
         console.log('Delete Yes')
+        deleteMovieApi(movie._id)
+            .unwrap()
+            .then(data =>{
+                console.log("delete Movie Success", movie)
+            })
         handleClose();
     }
     const handleNo = ()=>{
