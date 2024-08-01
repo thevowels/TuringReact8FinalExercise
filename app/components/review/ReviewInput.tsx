@@ -4,7 +4,7 @@ import {useState} from "react";
 import {Modal} from "react-bootstrap";
 import ReviewForm from "@/app/components/review/ReviewForm";
 
-export default function ReviewInput(){
+export default function ReviewInput({movieId}:{movieId:string}) {
     const [show,setShow]=useState(false);
     const handleClose = ()=>{setShow(false);};
     const handleShow = ()=>{setShow(true);};
@@ -17,7 +17,7 @@ export default function ReviewInput(){
                     <Modal.Title>Add Review</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ReviewForm closeModal={handleClose}/>
+                    <ReviewForm movieId={movieId} closeModal={handleClose}/>
                 </Modal.Body>
             </Modal>
 

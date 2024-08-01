@@ -7,20 +7,20 @@ import ReviewInput from "@/app/components/review/ReviewInput";
 import {useGetAllMoviesQuery} from "@/lib/features/movie/movieApi";
 
 const reviews:Review[] = [
-    {
-        "_id":"review1",
-        "movie":"movie$",
-        "rating":5,
-        "review": "Good batman movie",
-        "_v": 0
-    },
-    {
-        "_id":"review2",
-        "movie":"movie$",
-        "rating":1,
-        "review": "bad batman movie",
-        "_v": 0
-    },
+    // {
+    //     "_id":"review1",
+    //     "movie":"movie$",
+    //     "rating":5,
+    //     "review": "Good batman movie",
+    //     "_v": 0
+    // },
+    // {
+    //     "_id":"review2",
+    //     "movie":"movie$",
+    //     "rating":1,
+    //     "review": "bad batman movie",
+    //     "_v": 0
+    // },
 
 ]
 export default function Page({params}: {params: {id: string}}) {
@@ -35,8 +35,8 @@ export default function Page({params}: {params: {id: string}}) {
         <div>
             Movie Details {params.id}
             <MovieDetailUI movie={movie}/>
-            <ReviewInput/>
-            <ReviewList reviews={reviews}/>
+            <ReviewInput movieId={params.id}/>
+            <ReviewList movieId={params.id}/>
 
         </div>
     )

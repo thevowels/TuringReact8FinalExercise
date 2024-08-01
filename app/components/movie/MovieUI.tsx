@@ -1,6 +1,6 @@
 "use client"
 
-import {Movie} from "@/lib/features/movies/movieApi";
+import {Movie} from "@/lib/features/movie/movieApi";
 import Image from "next/image";
 import styles from "../../movies/movie.module.css"
 import "@/app/movies/movie.module.css"
