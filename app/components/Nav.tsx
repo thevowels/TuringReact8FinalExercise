@@ -47,6 +47,26 @@ export const Nav = () => {
                             Movies
                         </Link>
                     </li>
+                    <li className="nav-item nav-link">
+                        <Link
+                            className={`${styles.link} ${
+                                pathname === "/login" ? styles.active : ""
+                            }`}
+                            href="/login"
+                        >
+                            Login
+                        </Link>
+                    </li>
+                    <li className="nav-item nav-link">
+                        <Link
+                            className={`${styles.link} ${
+                                pathname === "/logout" ? styles.active : ""
+                            }`}
+                            href="/logout"
+                        >
+                            Logout
+                        </Link>
+                    </li>
 
                 </ul>
             </div>

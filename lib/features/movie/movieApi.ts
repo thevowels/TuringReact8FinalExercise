@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {RootState} from "@/lib/store";
 
 export interface Director{
     "name": string,
@@ -18,10 +19,21 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 console.log('backend url', BACKEND_URL);
 
 export const moviesApiSlice = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: BACKEND_URL }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: BACKEND_URL,
+        prepareHeaders:(headers, {getState} )=>{
+            const state = getState() as RootState;
+            console.log('prepared headers state' , state);
+            if(state.auth.token){
+                headers.set('Authorization', 'Bearer '+ state.auth.token);
+            }
+            return headers;
+        }
+
+    }),
     reducerPath: "moviesApi",
     // Tag types are used for caching and invalidation.
-    tagTypes: ["Movies"],
+    tagTypes: ["Movies","Reviews", "Auth"],
     endpoints: (build) => ({
         // Supply generics for the return type (in this case `QuotesApiResponse`)
         // and the expected query argument. If there is no argument, use `void`
