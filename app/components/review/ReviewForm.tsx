@@ -3,7 +3,7 @@ import {Field, Form, Formik} from "formik";
 import {Button, Form as BForm} from "react-bootstrap";
 import styles from "@/app/movies/movie.module.css";
 import * as Yup from "yup";
-import {Review, useAddReviewMutation} from "@/lib/features/review/reviewApi";
+import {Review, useAddReviewMutation, useUpdateReviewMutation} from "@/lib/features/review/reviewApi";
 import {useState} from "react";
 import { Rating as ReactRating } from '@smastrom/react-rating'
 import {useAddMovieMutation} from "@/lib/features/movie/movieApi";
@@ -16,23 +16,49 @@ const ReviewSchema = Yup.object().shape({
     rating: Yup.number()
         .required('Required'),
 })
-const initValues = {
-    review: "loreum",
-    rating: 2,
-}
 export default function ReviewForm({review, closeModal, movieId}: {review: Review, closeModal: ()=>void, movieId: string}) {
+    const initValues = {
+        review: review ? review.review: "loreum",
+        rating: review ? review.rating: 0
+    }
+
+
     const [rating, setRating] = useState(initValues.rating)
     const [addReviewApi, addReviewApiResult] = useAddReviewMutation();
+    const [ updateReviewApi, updateReviewApiResult ] = useUpdateReviewMutation();
+
+    function updateReview(values) {
+        const reviewToUpdate = {
+            ...review
+        }
+        reviewToUpdate.movie = movieId
+        reviewToUpdate.review = values.review
+        reviewToUpdate.rating = rating
+        console.log('Update Review ', reviewToUpdate)
+        updateReviewApi(reviewToUpdate)
+            .unwrap()
+            .then(data => {
+                console.log('Updating review success ', data)
+            })
+        closeModal()
+    }
 
     const btnSubmitHandler = (values)=>{
-        const json = {
-            ...values
-        }
-        json.rating = rating
-        json.movie = movieId
-        console.log('Values ', json)
+        if(review){
+            updateReview(values);
 
-        addReviewApi(json)
+        }else{
+            const json = {
+                ...values
+            }
+            json.rating = rating
+            json.movie = movieId
+            console.log('Values ', json)
+
+            addReviewApi(json)
+            closeModal()
+
+        }
     }
     return(
         <div>
@@ -41,8 +67,8 @@ export default function ReviewForm({review, closeModal, movieId}: {review: Revie
                     onSubmit={(values)=>{
                         btnSubmitHandler(values)
                         closeModal()
-
                     }}>
+
                 {({errors, touched}) => (
                     <Form>
                         <BForm.Group>

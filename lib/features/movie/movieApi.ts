@@ -76,7 +76,7 @@ export const moviesApiSlice = createApi({
                 const patchResult = dispatch(
                     moviesApiSlice.util.updateQueryData('getAllMovies', undefined, (draft)=>{
                         console.log('draft ', draft)
-                        draft = draft.map(mv => mv._id != movie._id ? movie: mv)
+                        draft = draft.map(mv => mv._id != movie._id ? mv: movie)
                         return draft;
                     })
                 )
