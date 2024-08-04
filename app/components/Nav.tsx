@@ -4,9 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 // import 'bootstrap/dist/css/bootstrap.css'
 import styles from "../styles/layout.module.css";
+import useAuth from "@/lib/features/auth/authHook";
 
 export const Nav = () => {
     const pathname = usePathname();
+    const loggedIn = useAuth();
+
+
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,7 +41,7 @@ export const Nav = () => {
                             Quotes
                         </Link>
                     </li>
-                    <li className="nav-item nav-link">
+                    {loggedIn && <li className="nav-item nav-link">
                         <Link
                             className={`${styles.link} ${
                                 pathname === "/movies" ? styles.active : ""
@@ -46,8 +50,9 @@ export const Nav = () => {
                         >
                             Movies
                         </Link>
-                    </li>
-                    <li className="nav-item nav-link">
+                    </li>}
+                    {
+                        !loggedIn &&  <li className="nav-item nav-link">
                         <Link
                             className={`${styles.link} ${
                                 pathname === "/login" ? styles.active : ""
@@ -57,7 +62,9 @@ export const Nav = () => {
                             Login
                         </Link>
                     </li>
-                    <li className="nav-item nav-link">
+                    }
+                    {
+                        loggedIn && <li className="nav-item nav-link">
                         <Link
                             className={`${styles.link} ${
                                 pathname === "/logout" ? styles.active : ""
@@ -67,6 +74,7 @@ export const Nav = () => {
                             Logout
                         </Link>
                     </li>
+                    }
 
                 </ul>
             </div>
