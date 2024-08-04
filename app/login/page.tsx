@@ -4,8 +4,10 @@ import {Field, Form, Formik} from "formik";
 import {Button, Form as BForm} from "react-bootstrap";
 import {useLoginMutation} from "@/lib/features/auth/authApi";
 import {useAppDispatch, useAppSelector} from "@/lib/hooks";
-import {login} from "@/lib/features/auth/authSlice";
+import {login, selectAuth} from "@/lib/features/auth/authSlice";
 import {useSelector} from "react-redux";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useEffect} from "react";
 
 const UserSchema = Yup.object().shape({
     userName: Yup.string()
@@ -18,13 +20,36 @@ const UserSchema = Yup.object().shape({
 
 export default function Page(){
     const dispatch = useAppDispatch();
-    const auth = useSelector(login)
+    const auth = useSelector(selectAuth)
 
     const [ loginApi, loginApiResponse] = useLoginMutation();
+
+    const searchParams = useSearchParams();
+
+    const router = useRouter();
+    const redirectUrl = searchParams.get("redirectUrl");
+
+    useEffect(() => {
+        console.log('Auth ', auth, 'redirect URL ',redirectUrl);
+        if(auth)
+        {
+            if(redirectUrl)
+            {
+                router.push(redirectUrl);
+            }
+            else
+            {
+                router.push('/');
+            }
+        }
+    })
+
     let initialValues = {
         userName: "",
         password: "",
     }
+
+
 
     function loginHandler(values) {
         loginApi(values)
