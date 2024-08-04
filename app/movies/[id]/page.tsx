@@ -1,10 +1,10 @@
 "use client"
 import MovieDetailUI from "@/app/components/movie/MovieDetailUI";
-import {Movie} from "@/lib/features/movies/movieApi";
 import {Review} from "@/lib/features/reviews/reviewApi";
 import ReviewList from "@/app/components/review/ReviewList";
 import ReviewInput from "@/app/components/review/ReviewInput";
 import {useGetAllMoviesQuery} from "@/lib/features/movie/movieApi";
+import IsAuth from "@/app/components/Auth/IsAuth";
 
 const reviews:Review[] = [
     // {
@@ -23,7 +23,7 @@ const reviews:Review[] = [
     // },
 
 ]
-export default function Page({params}: {params: {id: string}}) {
+function MovieDetailPage({params}: {params: {id: string}}) {
 
     const {movie} = useGetAllMoviesQuery(undefined,{
         selectFromResult: ({data})=>({
@@ -41,3 +41,5 @@ export default function Page({params}: {params: {id: string}}) {
         </div>
     )
 }
+
+export default IsAuth(MovieDetailPage)
